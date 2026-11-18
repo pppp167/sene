@@ -152,7 +152,7 @@
     .main-scroll-area::-webkit-scrollbar { display: none; }
 
     .blue-section {
-      padding: 0 16px 10px 16px;
+      padding: 0 clamp(18px, 4vw, 24px) 10px;
       position: relative;
       z-index: 10;
       display: flex;
@@ -163,7 +163,7 @@
 
     .card-wrapper {
       width: 100%;
-      max-width: 350px;
+      max-width: none;
       height: auto;
       aspect-ratio: 1.58 / 1;
       perspective: 1000px;
@@ -403,22 +403,32 @@
     .header-icons-expanded { display: flex; gap: 12px; }
 
     .expand-card-container {
-      position: absolute; top: 50%; left: 50%;
-      width: 100%; height: 100%;
-      transform: translate(-50%, -50%) rotate(90deg);
+      /* เลื่อนพื้นที่จัดบัตรลงจากจุดกึ่งกลางเพียง 12px และยังคำนวณขนาดจากจอเดิม */
+      position: absolute;
+      top: 12px;
+      right: 0;
+      bottom: -12px;
+      left: 0;
       display: flex; justify-content: center; align-items: center;
+      container-type: size;
     }
 
     .expand-card-inner {
       flex-shrink: 0;
-      width: min(calc(96cqh), calc((96cqw) * 1.58));
+      /* ความสูงหลังหมุนไม่เกินจอ และเว้นระยะจากปุ่มด้านบนโดยให้ขอบบนล่างสมดุล */
+      width: min(
+        calc(98cqh),
+        calc((98cqw) * 1.58),
+        calc(100cqh - env(safe-area-inset-top) - env(safe-area-inset-top) - 148px)
+      );
       aspect-ratio: 1.58 / 1;
       position: relative;
       transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: rotate(90deg);
       transform-style: preserve-3d;
       cursor: pointer; perspective: 1000px;
     }
-    .expand-card-inner.is-flipped { transform: rotateY(180deg); }
+    .expand-card-inner.is-flipped { transform: rotate(90deg) rotateY(180deg); }
 
     .expand-card-front, .expand-card-back {
       position: absolute; width: 100%; height: 100%;
